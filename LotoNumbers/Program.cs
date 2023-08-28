@@ -38,9 +38,11 @@ public class LoteriaInfo
 
 public class Premiacao
 {
-    public string Acertos { get; set; }
-    public int Vencedores { get; set; }
-    public string Premio { get; set; }
+    
+    public string Descricao { get; set; }
+    public int Faixa { get; set; }
+    public int Ganhadores { get; set; }
+    public decimal ValorPremio { get; set; }
 }
 
 public class Program
@@ -60,7 +62,7 @@ public class Program
                 { "9", "Super-Sete" }
             };
 
-        string loteria = null;
+        string? loteria = null;
 
         while (loteria == null)
         {
@@ -82,15 +84,16 @@ public class Program
                 {
                     loteria = selectedOption switch
                     {
-                        "1" => "mega-sena",
+                        "1" => "megasena",
                         "2" => "lotofacil",
                         "3" => "quina",
                         "4" => "lotomania",
                         "5" => "timemania",
-                        "6" => "dupla-sena",
-                        "7" => "loteria-federal",
-                        "8" => "dia-de-sorte",
-                        "9" => "super-sete",
+                        "6" => "duplasena",
+                        "7" => "loteriafederal",
+                        "8" => "diadesorte",
+                        "9" => "supersete",
+                        "10" => "maismilionaria",
                         _ => null
                     };
 
@@ -106,7 +109,7 @@ public class Program
             }
         }
 
-        Console.WriteLine($"Selecionado o jogo: {options.FirstOrDefault(x => x.Value.Equals(loteria, StringComparison.OrdinalIgnoreCase)).Value}");
+        Console.WriteLine($"Selecionado o jogo... ");
 
         var httpClient = new HttpClient();
         var response = httpClient.GetAsync($"https://loteriascaixa-api.herokuapp.com/api/{loteria}/latest").Result;
@@ -122,9 +125,10 @@ public class Program
         Console.Write("Premiações: ");
         foreach (var premiacao in loteriaInfo.Premiacoes)
         {
-            Console.WriteLine($"- Acertos: {premiacao.Acertos}");
-            Console.WriteLine($"  Vencedores: {premiacao.Vencedores}");
-            Console.WriteLine($"  Prêmio: {premiacao.Premio.Replace(".", "").Replace(",", ".")}");
+            Console.WriteLine($"- Acertos: {premiacao.Descricao}");
+            Console.WriteLine($"  Faixa: {premiacao.Faixa}");
+            Console.WriteLine($"  Vencedores: {premiacao.Ganhadores}");
+            Console.WriteLine($"  Prêmio: {premiacao.ValorPremio}");
             Console.WriteLine();
         }
         while (true)
